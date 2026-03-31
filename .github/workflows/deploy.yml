@@ -1,6 +1,8 @@
 name: Build & Deploy Blob-Cloud
 
 on:
+  push:
+    branches: [ main ]
   workflow_dispatch: # Allows manual trigger from the GitHub Actions UI
 
 jobs:
@@ -71,8 +73,21 @@ jobs:
         echo "VITE_GOOGLE_CLIENT_ID=${{ secrets.VITE_GOOGLE_CLIENT_ID }}" >> .env
         npm run build
 
+    # --- Check EC2 Deployment Credentials ---
+    - name: Verify EC2 Deployment Credentials
+      id: check_ec2
+      run: |
+        if [ -n "${{ secrets.EC2_HOST }}" ] && [ -n "${{ secrets.EC2_SSH_KEY }}" ]; then
+          echo "has_creds=true" >> $GITHUB_OUTPUT
+        else
+          echo "has_creds=false" >> $GITHUB_OUTPUT
+          echo "EC2 deployment credentials (EC2_HOST / EC2_SSH_KEY) are not configured."
+          echo "Skipping EC2 remote transfer. Artifacts compiled and validated successfully."
+        fi
+
     # --- Transfer Files to EC2 ---
     - name: Copy Assets & Binary to EC2 via SCP
+      if: steps.check_ec2.outputs.has_creds == 'true'
       uses: appleboy/scp-action@v0.1.7
       with:
         host: ${{ secrets.EC2_HOST }}
@@ -85,6 +100,7 @@ jobs:
 
     # --- Stop service, overwrite files, and restart service ---
     - name: SSH & Finalize Deployment
+      if: steps.check_ec2.outputs.has_creds == 'true'
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.EC2_HOST }}
