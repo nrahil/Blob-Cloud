@@ -24,14 +24,6 @@
  * ── Environment variables (set via wrangler.toml or dashboard secrets) ────────
  *   ALLOWED_ORIGIN    — CORS allowed origin (default "*" for dev)
  *   MAX_BLOCK_BYTES   — max body size in bytes (default 5_368_709_120 = 5 GiB)
- *
- * ── Amazon LP alignment ───────────────────────────────────────────────────────
- *   Insist on Highest Standards — integrity is enforced at the network edge,
- *     not inside the application server that processes uploads asynchronously.
- *   Frugality — zero server cost per validation; runs on Cloudflare's global
- *     network at the ~$0.30/million-requests tier.
- *   Think Big — the same Worker protects both single-PUT and multipart parts
- *     without code changes; part URLs share the same /blocks/<hash> key space.
  */
 
 export default {

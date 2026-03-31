@@ -345,7 +345,7 @@ func writeJSON(w http.ResponseWriter, status int, v any) {
 
 // getAppBaseURL returns the configured base URL for user-facing links (invitations,
 // password resets, public shares). It prioritises APP_BASE_URL, then BASE_URL,
-// and defaults safely to the production domain https://blobcloud.dev.
+// and defaults to http://localhost:5173 when unconfigured.
 func getAppBaseURL() string {
 	if val := strings.TrimSpace(os.Getenv("APP_BASE_URL")); val != "" {
 		return strings.TrimRight(val, "/")
@@ -353,5 +353,5 @@ func getAppBaseURL() string {
 	if val := strings.TrimSpace(os.Getenv("BASE_URL")); val != "" {
 		return strings.TrimRight(val, "/")
 	}
-	return "https://blobcloud.dev"
+	return "http://localhost:5173"
 }

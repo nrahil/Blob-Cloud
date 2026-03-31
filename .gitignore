@@ -53,11 +53,6 @@ npm-debug.log*
 backend/check_s3.go
 backend/test_*.go
 
-# Backup & scratch directories
-.git_backup2/
-.git_corrupted/
-scratch/
-frontend_change.md
 # Binary & Lambda build artifacts
 bootstrap
 *.zip

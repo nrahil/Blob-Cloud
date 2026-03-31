@@ -75,7 +75,7 @@ services:
       S3_BUCKET: blobcloud-storage
       # When SQS_QUEUE_URL is provided, API pushes thumbnail jobs to SQS
       # SQS_QUEUE_URL: https://sqs.us-east-1.amazonaws.com/123456789012/blobcloud-jobs
-      JWT_SECRET: super-secret-production-key-blobcloud-jwt-token
+      JWT_SECRET: ${JWT_SECRET:-dev-insecure-jwt-secret-replace-in-production}
       RATE_LIMIT_AUTH_PER_MIN: 10
       RATE_LIMIT_UPLOAD_PER_MIN: 30
       RATE_LIMIT_API_PER_MIN: 120
